@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class BookReader extends CsvReader<BookDto> {
 
-    @Value("${lab-supplyer.books.file}")
+    @Value("${lab-supplier.books.file}")
     private String booksFile;
 
     @Override

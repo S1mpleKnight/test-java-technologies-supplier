@@ -17,9 +17,9 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class RabbitConfiguration {
 
-    @Value("${lab-supplyer.queue.book.name.first}")
+    @Value("${lab-supplier.queue.book.name.first}")
     private String firstBookQueueName;
-    @Value("${lab-supplyer.queue.book.name.second}")
+    @Value("${lab-supplier.queue.book.name.second}")
     private String secondBookQueueName;
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -27,11 +27,11 @@ public class RabbitConfiguration {
     private String username;
     @Value("${spring.rabbitmq.password}")
     private String password;
-    @Value("${lab-supplyer.books.exchange}")
+    @Value("${lab-supplier.books.exchange}")
     private String bookExchangeName;
-    @Value("${lab-supplyer.books.routing.key.first}")
+    @Value("${lab-supplier.books.routing.key.first}")
     private String firstRoutingKey;
-    @Value("${lab-supplyer.books.routing.key.second}")
+    @Value("${lab-supplier.books.routing.key.second}")
     private String secondRoutingKey;
 
     @Bean

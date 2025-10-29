@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 public abstract class CsvReader<T> {
 
-    @Value("${lab-supplyer.csv.separator}")
+    @Value("${lab-supplier.csv.separator}")
     protected String textSeparator;
 
     public abstract List<T> readFile();

@@ -1,7 +1,7 @@
 package ivan.zelezinski.lab_supplyer.service;
 
 import ivan.zelezinski.lab_supplyer.dto.BookDto;
-import ivan.zelezinski.lab_supplyer.dto.SendParamsDto;
+import ivan.zelezinski.lab_supplyer.dto.AmountDto;
 import ivan.zelezinski.lab_supplyer.reader.BookReader;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,26 +20,27 @@ public class MessageSender {
 
     private final AmqpTemplate amqpTemplate;
     private final BookReader bookReader;
+    private final ForkJoinPool forkJoinPool = new ForkJoinPool(8);
 
-    @Value("${lab-supplyer.books.routing.key.first}")
+    @Value("${lab-supplier.books.routing.key.first}")
     private String firstRoutingKey;
-    @Value("${lab-supplyer.books.routing.key.second}")
+    @Value("${lab-supplier.books.routing.key.second}")
     private String secondRoutingKey;
-    @Value("${lab-supplyer.books.exchange}")
+    @Value("${lab-supplier.books.exchange}")
     private String bookExchangeName;
 
-    public void sendBook(SendParamsDto params) {
+    public void sendBooks(AmountDto params) {
         List<BookDto> dtos = bookReader.readFile();
 
-        try (ForkJoinPool forkJoinPool = new ForkJoinPool(8)) {
-            for (int i = 0; i < params.getTimes(); i++) {
-                dtos.forEach(dto -> forkJoinPool
-                        .submit(() -> amqpTemplate.convertAndSend(bookExchangeName, firstRoutingKey, dto)));
-                dtos.forEach(dto -> forkJoinPool
-                        .submit(() -> amqpTemplate.convertAndSend(bookExchangeName, secondRoutingKey, dto)));
-            }
-            forkJoinPool.shutdown();
-            forkJoinPool.awaitQuiescence(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        for (int i = 0; i < params.getTimes(); i++) {
+            dtos.forEach(dto -> forkJoinPool
+                    .submit(() -> amqpTemplate.convertAndSend(bookExchangeName, firstRoutingKey, dto)));
+            dtos.forEach(dto -> forkJoinPool
+                    .submit(() -> amqpTemplate.convertAndSend(bookExchangeName, secondRoutingKey, dto)));
         }
+
+        forkJoinPool.shutdown();
+        forkJoinPool.awaitQuiescence(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
     }
 }

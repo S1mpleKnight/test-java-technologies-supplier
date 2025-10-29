@@ -11,7 +11,7 @@ import java.util.List;
 
 @SpringBootApplication
 @AllArgsConstructor
-public class LabSupplyerApplication {
+public class LabSupplierApplication {
 
     private final RabbitAdmin rabbitAdmin;
     private final List<Binding> bindings;
@@ -23,7 +23,7 @@ public class LabSupplyerApplication {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(LabSupplyerApplication.class, args);
+		SpringApplication.run(LabSupplierApplication.class, args);
 	}
 
 }
